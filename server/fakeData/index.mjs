@@ -3,6 +3,10 @@ export default {
         {
             id: 123,
             name: 'huy'
+        },
+        {
+            id: 999,
+            name: 'test'
         }
     ],
     folders: [
@@ -16,7 +20,7 @@ export default {
             id: 2,
             name: 'Home2',
             createdAt: '2023',
-            authorId: 1,
+            authorId: 999,
         },
         {
             id: 3,
