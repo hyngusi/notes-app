@@ -1,15 +1,24 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Button, Typography } from '@mui/material';
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { AuthContext } from "../context/AuthProvider";
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const auth = getAuth();
+    const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const handleLoginWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
 
-        await signInWithPopup(auth, provider)
-        console.log({ res })
+        await signInWithPopup(auth, provider);
+        console.log({ res });
+    }
+
+    if (user?.uid) {
+        navigate('/');
+        return;
     }
 
     return (
