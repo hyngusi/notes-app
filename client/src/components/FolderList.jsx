@@ -1,8 +1,14 @@
 import { Box, Card, CardContent, CardMedia, List, Typography } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 export default function FolderList({ folders }) {
+    const { folderId } = useParams();
+    // console.log({folderId});
+    const [activeFolderId, setActiveFolderId] = useState(folderId);
+
+    // console.log("Active Folder ID:", activeFolderId); // In ra giá trị của activeFolderId trong console log
+
     return (
         <List sx={{
             width: '100%',
@@ -22,23 +28,29 @@ export default function FolderList({ folders }) {
             {
                 folders.map(({ id, name }) => {
                     return (
-                        < Link
+                        <Link
                             key={id}
                             to={`folders/${id}`}
-                            style={{ textDecoration: 'none' }}
+                            style={{
+                                textDecoration: 'none',
+                            }}
+                            onClick = { () => setActiveFolderId(id) }
                         >
-                            <Card sx={{ mb: '5px' }}>
+                            <Card sx={{
+                                mb: '5px',
+                                backgroundColor: id === activeFolderId ? 'rgb(255 211 140)' : null
+                            }}>
                                 <CardContent
                                     sx={{
                                         '&:last-child': { pb: '10px' }, padding: '10px'
                                     }}>
-                                    <Typography>{name}</Typography>
+                                    <Typography sx={{fontStyle: 16, fontWeight: "blod" }}>{name}</Typography>
                                 </CardContent>
                             </Card>
-                        </Link >
+                        </Link>
                     )
                 })
             }
-        </ List >
+        </List>
     )
 }
