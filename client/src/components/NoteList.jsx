@@ -1,16 +1,11 @@
 import { Box, Card, CardContent, Grid, List, Typography } from "@mui/material";
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLoaderData } from "react-router-dom";
 
 export default function NoteList() {
-  const folder = {
-    notes: [
-      {
-        id: "1",
-        content: "<p>this is new note</p>",
-      },
-    ],
-  };
+  const { folder } = useLoaderData();
+
+
   return (
     <Grid container height={"100%"}>
       <Grid

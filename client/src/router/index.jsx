@@ -61,6 +61,10 @@ export default createBrowserRouter([
                                         folder(folderID: $folderId) {
                                           id
                                           name
+                                          notes {
+                                            id
+                                            content
+                                          }
                                         }
                                       }`;
 
