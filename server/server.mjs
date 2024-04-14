@@ -25,12 +25,18 @@ const typeDefs = `#graphql
 
     type Query {
         folders: [Folder],
-
+        folder(folderID: String): Folder,
     }
 `;
 const resolvers = {  //xử lý dữ liệu và trả về dữ liệu cho client dựa theo query 
     Query: {
-        folders: () => { return fakeData.folders }
+        folders: () => {
+            return fakeData.folders
+        },
+        folder: (parent, args) => {
+            const folderID = args.folderID;
+            return fakeData.folders.find(folder => folder.id === folderID)
+        },
     },
     Folder: {
         author: (parent, args) => {
