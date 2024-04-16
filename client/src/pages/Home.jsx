@@ -5,7 +5,7 @@ import UserMenu from '../components/UserMenu'
 import FolderList from '../components/FolderList'
 import { Outlet, useLoaderData } from 'react-router-dom'
 export default function Home() {
-    const { folders } = useLoaderData();
+    const { folders } = useLoaderData(); // lấy ra giá trị khi gọi loader trong index.js
 
     // console.log('[Home pages]', { data })
 

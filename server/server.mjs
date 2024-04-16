@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import { expressMiddleware } from '@apollo/server/express4'
 import cors from 'cors'
 import fakeData from './fakeData/index.mjs';
+import { argv } from 'process';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -32,6 +33,7 @@ const typeDefs = `#graphql
     type Query {
         folders: [Folder],
         folder(folderID: String): Folder,
+        note(noteId: String): Note,
     }
 `;
 const resolvers = {  //xử lý dữ liệu và trả về dữ liệu cho client dựa theo query 
@@ -42,6 +44,9 @@ const resolvers = {  //xử lý dữ liệu và trả về dữ liệu cho clien
         folder: (parent, args) => {
             const folderID = args.folderID;
             return fakeData.folders.find(folder => folder.id === folderID)
+        }, note: (parent, args) => {
+            const noteId = args.noteId;
+            return fakeData.notes.find(note => note.id === noteId);
         },
     },
     Folder: {

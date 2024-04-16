@@ -13,9 +13,7 @@ import { Container } from '@mui/system';
 import './firebase/config.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Container maxWidth='lg' sx={{ textAlign: 'center', marginTop: '50px' }}>
-      <RouterProvider router={router} />
-    </Container>
-  </React.StrictMode >,
+  <Container maxWidth='lg' sx={{ textAlign: 'center', marginTop: '50px' }}>
+    <RouterProvider router={router} />
+  </Container>
 );
