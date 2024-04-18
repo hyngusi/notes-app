@@ -17,21 +17,21 @@ const URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 const PORT = process.env.PORT || 4000;
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
 mongoose
-  .connect(URI, {
-    useNewURLParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(async () => {
-    console.log("connected ");
-    await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
-    console.log(`Server ready at http://localhost:4000`);
-  });
+    .connect(URI, {
+        useNewURLParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(async () => {
+        console.log("connected ");
+        await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
+        console.log(`Server ready at http://localhost:4000`);
+    });
 
 await server.start();
 

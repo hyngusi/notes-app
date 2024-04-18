@@ -42,6 +42,7 @@ export const noteLoader = async ({ params: { noteId } }) => {
     headers: {
       "Content-type": "application/json",
       Accept: "application/json",
+      Authorization: 'Bearer .....'
     },
     body: JSON.stringify({
       query,
