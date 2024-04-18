@@ -4,8 +4,11 @@ import { FolderModel, NoteModel } from "../models/index.js";
 export const resolvers = {
   //xử lý dữ liệu và trả về dữ liệu cho client dựa theo query
   Query: {
-    folders: async () => {
-      const folders = await FolderModel.find();
+    folders: async (parent, args, context) => {
+      const folders = await FolderModel.find({
+        authorId: context.uid,
+      });
+      console.log({ folders, context });
       return folders;
     },
     folder: async (parent, args) => {

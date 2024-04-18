@@ -4,7 +4,7 @@ export const GraphQLRequest = async (payload, options = {}) => {
     const res = await fetch(`${GRAPHQL_SERVER}/graphql`, {
         method: "POST",
         headers: {
-            "Content-type": "application/json",
+            'Content-type': "application/json",
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             ...options
@@ -12,6 +12,6 @@ export const GraphQLRequest = async (payload, options = {}) => {
         body: JSON.stringify(payload),
     });
 
-    const { data } = res.json();
+    const { data } = await res.json();
     return data;
 }

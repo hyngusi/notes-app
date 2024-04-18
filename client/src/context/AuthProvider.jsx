@@ -12,7 +12,8 @@ export default function AuthProvider({ children }) {
     const navigate = useNavigate();
 
     // Lấy instance của firebase auth
-    const auth = getAuth();
+    const auth = getAuth()
+    console.log({ auth })
 
     // Sử dụng useEffect để thực hiện các tác vụ sau khi component được render
     useEffect(() => {
