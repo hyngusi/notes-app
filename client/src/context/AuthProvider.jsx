@@ -10,7 +10,6 @@ export default function AuthProvider({ children }) {
     const [user, setUser] = useState({});
     // Sử dụng hook useNavigation từ react-router-dom để điều hướng đến các route
     const navigate = useNavigate();
-
     // Lấy instance của firebase auth
     const auth = getAuth()
     console.log({ auth })

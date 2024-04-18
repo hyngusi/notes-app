@@ -1,5 +1,5 @@
 import fakeData from "../fakeData/index.js";
-import { FolderModel, NoteModel } from "../models/index.js";
+import { AuthorModel, FolderModel, NoteModel } from "../models/index.js";
 
 export const resolvers = {
   //xử lý dữ liệu và trả về dữ liệu cho client dựa theo query
@@ -51,5 +51,16 @@ export const resolvers = {
       await newFolder.save();
       return newFolder;
     },
+    register: async (parent, args) => {
+      const foundUser = await AuthorModel.findOne({ uid: args?.uid });
+
+      if (!foundUser) {
+        const newUser = new AuthorModel(args);
+        await newUser.save();
+        return newUser;
+      }
+
+      return foundUser;
+    }
   },
 };

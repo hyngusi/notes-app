@@ -51,8 +51,4 @@ export default createBrowserRouter([
             }
         ]
     },
-    // {
-    //     element: <Home />,
-    //     path: '/'
-    // }
 ])
