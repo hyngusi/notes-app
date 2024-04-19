@@ -1,13 +1,40 @@
-import { Box, Card, CardContent, Grid, List, Typography } from "@mui/material";
+import { NoteAddOutlined } from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  List,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet, useParams, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useParams,
+  useLoaderData,
+  useSubmit,
+} from "react-router-dom";
 
 export default function NoteList() {
-  const {noteId} = useParams();
+  const { noteId, folderId } = useParams();
   const [activeNoteId, setActiveNoteId] = useState(noteId);
+  const submit = useSubmit();
 
   const { folder } = useLoaderData();
 
+  const handleAddNewNote = () => {
+    // Chuyển dữ liệu thành form data
+    submit(
+      {
+        content: "",
+        folderId,
+      },
+      { method: "post", action: `/folders/${folderId}` }
+    );
+  };
 
   return (
     <Grid container height={"100%"}>
@@ -20,14 +47,19 @@ export default function NoteList() {
           bgcolor: "#F0EBE3",
           height: "100%",
           overflowY: "auto",
-          padding: '10px',
+          padding: "10px",
           textAlign: "left",
         }}
       >
         <List
           subheader={
-            <Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography sx={{ fontWeight: "bold" }}>Notes</Typography>
+              <Tooltip title="Add Note" onClick={handleAddNewNote}>
+                <IconButton size="small">
+                  <NoteAddOutlined />
+                </IconButton>
+              </Tooltip>
             </Box>
           }
         >
@@ -37,10 +69,15 @@ export default function NoteList() {
                 key={id}
                 to={`note/${id}`}
                 style={{ textDecoration: "none" }}
-                onClick={ () => setActiveNoteId(id)}
+                onClick={() => setActiveNoteId(id)}
               >
-                <Card sx={{ mb: "5px",
-              backgroundColor: id === activeNoteId ? 'rgb(255 211 140)' : null }}>
+                <Card
+                  sx={{
+                    mb: "5px",
+                    backgroundColor:
+                      id === activeNoteId ? "rgb(255 211 140)" : null,
+                  }}
+                >
                   <CardContent
                     sx={{ "&:last-child": { pb: "10px" }, padding: "10px" }}
                   >

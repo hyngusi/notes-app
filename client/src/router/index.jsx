@@ -6,7 +6,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import ErorrPage from "../pages/ErrorPage.jsx";
 import NoteList from "../components/NoteList.jsx";
 import Note from "../components/Note.jsx";
-import { notesLoader, noteLoader } from "../utils/noteUtils.js";
+import { notesLoader, noteLoader, addNewNote } from "../utils/noteUtils.js";
 import { foldersLoader } from "../utils/folderUtils.js";
 
 const AuthLayout = () => {
@@ -39,7 +39,8 @@ export default createBrowserRouter([
                 //Khi nhap vao mot cai folder bat ky thi ra chu de cua folder do
                 element: <NoteList />,
                 path: `folders/:folderId`,
-                // action: addNewNote,
+                //
+                action: addNewNote,
                 loader: notesLoader,
                 children: [
                   {
