@@ -1,6 +1,3 @@
-import fbConfig from './fbConfig';
-import 'dotenv/config';
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -10,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: process.evn.apiKey,
-    authDomain: fbConfig.authDomain,
-    projectId: fbConfig.projectId,
-    storageBucket: fbConfig.storageBucket,
-    messagingSenderId: fbConfig.messagingSenderId,
-    appId: fbConfig.appId,
-    measurementId: fbConfig.measurementId
+    apiKey: "AIzaSyDd8RxL-OSTBtUkSj1j4M9w0GHx-5jSaic",
+    authDomain: "note-app-c8d27.firebaseapp.com",
+    projectId: "note-app-c8d27",
+    storageBucket: "note-app-c8d27.appspot.com",
+    messagingSenderId: "835545883865",
+    appId: "1:835545883865:web:32f44154f7725742a18ac8",
+    measurementId: "G-1N0STN9NVP"
 };
 
 // Initialize Firebase
