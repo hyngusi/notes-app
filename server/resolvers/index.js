@@ -7,16 +7,17 @@ export const resolvers = {
     folders: async (parent, args, context) => {
       const folders = await FolderModel.find({
         authorId: context.uid,
-      });
+      }) // Sắp xếp lại folder, đưa folder mới tạo lên đầu
+        .sort({
+          updatedAt: "desc",
+        });
       console.log({ folders, context });
       return folders;
     },
     folder: async (parent, args) => {
       const folderID = args.folderID;
-      console.log({ folderID });
-      const foundFolder = await FolderModel.findOne({
-        _id: folderID,
-      });
+      console.log(folderID);
+      const foundFolder = await FolderModel.findById(folderID);
       return foundFolder;
     },
     // note: (parent, args) => {
@@ -24,29 +25,38 @@ export const resolvers = {
     //   return fakeData.notes.find((note) => note.id === noteID);
     // },
     note: async (parent, args) => {
-      const noteID = args.noteID;
-      console.log({ noteID });
-      const foundnote = await NoteModel.findOne({
-        _id: noteID,
-      });
-      return foundnote;
+      const noteId = args.noteId;
+      const note = await NoteModel.findById(noteId);
+      console.log(note);
+      return note;
     },
   },
   Folder: {
-    author: (parent, args) => {
-      console.log({ parent, args });
+    author: async (parent, args) => {
       const authorId = parent.authorId;
-      return fakeData.authors.find((author) => author.id === authorId);
+      const author = await AuthorModel.findOne({
+        uid: authorId,
+      });
+      return author;
       // return { id: 123, name: "huy" }
     },
-    notes: (parent, args) => {
-      return fakeData.notes.filter((note) => note.folderId === parent.id);
+    notes: async (parent, args) => {
+      const notes = await NoteModel.find({
+        folderId: parent.id,
+      });
+      console.log({ notes });
+      return notes;
     },
   },
 
   Mutation: {
-    addFolder: async (parent, args) => {
-      const newFolder = new FolderModel({ ...args, authorId: "123" });
+    addNote: async (parent, args) => {
+      const newNote = new NoteModel(args);
+      await newNote.save();
+      return newNote;
+    },
+    addFolder: async (parent, args, context) => {
+      const newFolder = new FolderModel({ ...args, authorId: context["uid"] });
       console.log({ newFolder });
       await newFolder.save();
       return newFolder;
@@ -61,6 +71,6 @@ export const resolvers = {
       }
 
       return foundUser;
-    }
+    },
   },
 };
