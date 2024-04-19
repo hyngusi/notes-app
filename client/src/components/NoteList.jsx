@@ -9,21 +9,32 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Link,
   Outlet,
   useParams,
   useLoaderData,
   useSubmit,
+  useNavigate,
 } from "react-router-dom";
-
+import moment from "moment";
 export default function NoteList() {
   const { noteId, folderId } = useParams();
   const [activeNoteId, setActiveNoteId] = useState(noteId);
   const submit = useSubmit();
-
+  const navigate = useNavigate();
   const { folder } = useLoaderData();
+
+  useEffect(() => {
+    if (noteId) {
+      setActiveNoteId(noteId);
+      return;
+    }
+    if (folder?.notes?.[0]) {
+      navigate(`note/${folder.notes[0].id}`);
+    }
+  }, [noteId, folder.notes]);
 
   const handleAddNewNote = () => {
     // Chuyển dữ liệu thành form data
@@ -63,7 +74,7 @@ export default function NoteList() {
             </Box>
           }
         >
-          {folder.notes.map(({ id, content }) => {
+          {folder.notes.map(({ id, content, updatedAt }) => {
             return (
               <Link
                 key={id}
@@ -87,6 +98,9 @@ export default function NoteList() {
                         __html: `${content.substring(0, 30) || "Empty"}`,
                       }}
                     />
+                    <Typography sx={{ fontSize: "10px" }}>
+                      {moment(updatedAt).format("MMMM Do YYYY, h:mm:ss a")}
+                    </Typography>
                   </CardContent>
                 </Card>
               </Link>

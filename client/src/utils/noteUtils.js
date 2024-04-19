@@ -1,5 +1,4 @@
 import { GraphQLRequest } from "./request";
-
 export const notesLoader = async ({ params: { folderId } }) => {
   const query = `query Folder($folderId: String!) {
         folder(folderID: $folderId) {
@@ -8,6 +7,7 @@ export const notesLoader = async ({ params: { folderId } }) => {
           notes {
             id
             content
+            updatedAt
           }
         }
       }`;
@@ -62,4 +62,28 @@ export const addNewNote = async ({ params, request }) => {
 
   console.log({ addNote });
   return addNote;
+};
+
+export const updateNote = async ({ params, request }) => {
+  //Lấy dữ liệu khi submit
+  const updatedNote = await request.formData();
+  const formDataObj = {};
+  updatedNote.forEach((value, key) => (formDataObj[key] = value));
+  console.log({ updatedNote, formDataObj });
+
+  const query = `mutation Mutation($id: String!, $content: String!){
+    updateNote(id: $id, content: $content)
+    {
+      id,
+      content
+    }
+  }`;
+
+  const updateNote = await GraphQLRequest({
+    query,
+    variables: formDataObj,
+  });
+
+  console.log({ updateNote });
+  return updateNote;
 };

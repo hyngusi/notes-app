@@ -1,39 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { EditorState, convertFromHTML, ContentState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import { draftToHtml } from 'draftjs-to-html';
-import { useLoaderData } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  EditorState,
+  convertFromHTML,
+  ContentState,
+  convertToRaw,
+} from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html"; // Import hàm draftToHtml từ thư viện draftjs-to-html
+import { useLoaderData, useSubmit, useLocation } from "react-router-dom";
+import { debounce } from "@mui/material";
 
 export default function Note() {
-    const { note } = useLoaderData();
+  const { note } = useLoaderData();
 
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const submit = useSubmit();
+  const location = useLocation();
 
-    useEffect(() => {
-        const blocksFromHTML = convertFromHTML(note.content);
-        const contentState = ContentState.createFromBlockArray(
-            blocksFromHTML.contentBlocks,
-            blocksFromHTML.entityMap
-        )
-        setEditorState(EditorState.createWithContent(contentState));
-    }, [note.content]);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
 
-    const [rawHTML, setRawHTML] = useState(note.content);
+  useEffect(() => {
+    const blocksFromHTML = convertFromHTML(note.content);
+    const state = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    setEditorState(EditorState.createWithContent(state));
+  }, [note.id]);
 
-    useEffect(() => {
-        setRawHTML(note.content);
-    }, [note.content])
+  const [rawHTML, setRawHTML] = useState(note.content);
 
-    const handleEditorChange = (e) => {
-        setEditorState(e);
-        setRawHTML(draftToHtml(convertToRaw(e.getCurrentContent())));
-    }
+  useEffect(() => {
+    debouncedMemorized(rawHTML, note, location.pathname);
+  }, [rawHTML, location.pathname]);
 
-    return (
-        <Editor
-            editorState={editorState}
-            onEditorStateChange={handleEditorChange}
-            placeholder='Write something'
-        />
-    )
+  //   Sử dụng debounce để trì hoãn việc gửi yêu cầu lưu dữ liệu trong 1 giây sau khi người dùng kết thúc nhập
+  const debouncedMemorized = useMemo(() => {
+    return debounce((rawHTML, note, pathname) => {
+      if (rawHTML === note.content) return;
+
+      submit(
+        { ...note, content: rawHTML },
+        {
+          method: "post",
+          action: pathname,
+        }
+      );
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    setRawHTML(note.content);
+  }, [note.content]);
+
+  console.log({ location });
+
+  // Xử lý sự kiện thay đổi nội dung của trình soạn thảo
+  const handleOnchange = (e) => {
+    setEditorState(e);
+    // Chuyển đổi nội dung từ trình soạn thảo sang HTML và cập nhật rawHTML
+    setRawHTML(draftToHtml(convertToRaw(e.getCurrentContent())));
+  };
+
+  return (
+    <Editor
+      editorState={editorState}
+      onEditorStateChange={handleOnchange}
+      placeholder="Write something"
+    />
+  );
 }

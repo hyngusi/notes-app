@@ -1,7 +1,16 @@
-import fakeData from "../fakeData/index.js";
+import { GraphQLScalarType } from "graphql";
 import { AuthorModel, FolderModel, NoteModel } from "../models/index.js";
 
 export const resolvers = {
+  Date: new GraphQLScalarType({
+    name: "Date",
+    parseValue(value) {
+      return new Date(value);
+    },
+    serialize(value) {
+      return value.toISOString();
+    },
+  }),
   //xử lý dữ liệu và trả về dữ liệu cho client dựa theo query
   Query: {
     folders: async (parent, args, context) => {
@@ -43,6 +52,8 @@ export const resolvers = {
     notes: async (parent, args) => {
       const notes = await NoteModel.find({
         folderId: parent.id,
+      }).sort({
+        updatedAt: "desc",
       });
       console.log({ notes });
       return notes;
@@ -55,6 +66,13 @@ export const resolvers = {
       await newNote.save();
       return newNote;
     },
+
+    updateNote: async (parent, args) => {
+      const noteId = args.id;
+      const note = await NoteModel.findByIdAndUpdate(noteId, args);
+      return note;
+    },
+
     addFolder: async (parent, args, context) => {
       const newFolder = new FolderModel({ ...args, authorId: context["uid"] });
       console.log({ newFolder });
